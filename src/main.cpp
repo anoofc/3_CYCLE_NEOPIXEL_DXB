@@ -19,6 +19,14 @@ Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUMPIXELS, LED_1, NEO_GRB + NEO_KHZ
 Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUMPIXELS, LED_2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUMPIXELS, LED_3, NEO_GRB + NEO_KHZ800); 
 
+
+void readBTSerial () {
+  if (SerialBT.available()) {
+    char incoming = SerialBT.read();
+    if (DEBUG){ Serial.println(incoming); }
+  }
+}
+
 void io_init() {
   pinMode(SENSOR_1, INPUT);
   pinMode(SENSOR_2, INPUT);
