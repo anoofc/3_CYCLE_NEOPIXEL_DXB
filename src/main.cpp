@@ -19,11 +19,23 @@ Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(NUMPIXELS, LED_1, NEO_GRB + NEO_KHZ
 Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(NUMPIXELS, LED_2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(NUMPIXELS, LED_3, NEO_GRB + NEO_KHZ800); 
 
+void processData(char data){
+  // TODO: Implement this function
+}
 
 void readBTSerial () {
   if (SerialBT.available()) {
     char incoming = SerialBT.read();
     if (DEBUG){ Serial.println(incoming); }
+    processData(incoming);
+  }
+}
+
+void readSerial () {
+  if (Serial.available()) {
+    char incoming = Serial.read();
+    if (DEBUG){ Serial.println(incoming); }
+    processData(incoming);
   }
 }
 
@@ -44,6 +56,7 @@ void setup() {
 }
 
 void loop() {
-  
+  readBTSerial();
+  readSerial();
 }
 
