@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 28.8, "left": 4.84, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 54.2,
+      "left": -144,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn2",
+      "top": 111.8,
+      "left": -144,
+      "attrs": { "color": "green" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn3",
+      "top": 169.4,
+      "left": -144,
+      "attrs": { "color": "green" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "btn1:2.l", "btn2:2.l", "black", [ "h-19.2", "v0.2" ] ],
+    [ "btn3:2.l", "btn2:2.l", "black", [ "h-19.2", "v-57.4" ] ],
+    [ "btn1:2.l", "esp:GND.2", "black", [ "h-19.2", "v-67", "h288", "v38.4" ] ],
+    [ "esp:25", "btn1:1.r", "gold", [ "v0", "h-57.45", "v-67.2" ] ],
+    [ "esp:27", "btn3:1.r", "magenta", [ "h-57.45", "v28.8" ] ],
+    [ "esp:26", "btn2:1.r", "blue", [ "h-67.05", "v-19.2", "h-9.6" ] ]
+  ],
+  "dependencies": {}
+}
