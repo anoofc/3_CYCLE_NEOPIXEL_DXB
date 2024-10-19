@@ -129,7 +129,7 @@ void blinkLED2() {
 
       if (ledState) {
         for (uint8_t i = 0; i < STRIP2_NUMPIXELS; i++) {
-          strip2.setPixelColor(i, RED);
+          strip2.setPixelColor(i, BLUE);
         }
       } else {
         strip2.clear();
@@ -158,7 +158,7 @@ void blinkLED3() {
 
       if (ledState) {
         for (uint8_t i = 0; i < STRIP3_NUMPIXELS; i++) {
-          strip3.setPixelColor(i, RED);
+          strip3.setPixelColor(i, PURPLE);
         }
       } else {
         strip3.clear();
