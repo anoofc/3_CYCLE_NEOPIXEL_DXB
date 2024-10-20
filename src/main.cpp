@@ -16,7 +16,6 @@
 #define TIMOUT_2             15000
 #define TIMOUT_3             15000
 
-#define MULT_FACTOR   10.5
 
 #define LED_BLINK_DELAY  500
 
@@ -40,9 +39,9 @@ bool      sens1LastState         = false;
 bool      sens2LastState         = false;
 bool      sens3LastState         = false;
 
-uint16_t   cycleOneCounter        = 0;
-uint16_t   cycleTwoCounter        = 0;
-uint16_t   cycleThreeCounter      = 0;
+uint16_t  cycleOneCounter        = 0;
+uint16_t  cycleTwoCounter        = 0;
+uint16_t  cycleThreeCounter      = 0;
 
 uint32_t  cycleOneUpdateMillis   = 0;
 uint32_t  cycleTwoUpdateMillis   = 0;
