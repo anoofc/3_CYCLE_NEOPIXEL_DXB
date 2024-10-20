@@ -16,7 +16,6 @@
 #define TIMOUT_2             15000
 #define TIMOUT_3             15000
 
-
 #define LED_BLINK_DELAY  500
 
 #define RED           255,  0,    0
@@ -38,6 +37,10 @@ bool      led3Blink              = false;
 bool      sens1LastState         = false;
 bool      sens2LastState         = false;
 bool      sens3LastState         = false;
+
+bool      cycleOneActive         = false;  
+bool      cycleTwoActive         = false;
+bool      cycleThreeActive       = false;
 
 uint16_t  cycleOneCounter        = 0;
 uint16_t  cycleTwoCounter        = 0;
@@ -176,6 +179,7 @@ void cycle1Handler(){
       Serial.println("A_0");
       led1Blink = true;
       cycleOneCounter = 0;
+      cycleOneActive = false;
       cycleOneUpdateMillis = millis();
     }
   } 
@@ -192,6 +196,7 @@ void cycle2Handler(){
       Serial.println("B_0");
       led2Blink = true;
       cycleTwoCounter = 0;
+      cycleTwoActive = false;
       cycleTwoUpdateMillis = millis();
     }
   } 
@@ -208,6 +213,7 @@ void cycle3Handler(){
       Serial.println("C_0");
       led3Blink = true;
       cycleThreeCounter = 0;
+      cycleThreeActive = false;
       cycleThreeUpdateMillis = millis();
     }
   } 
@@ -228,11 +234,11 @@ void updateSensorState(){
 
 void processData(char data){
   if (data == 'A'){
-    led1Blink = true;
+    cycleOneActive = true;
   } else if (data == 'B'){
-    led2Blink = true;
+    cycleTwoActive = true;
   } else if (data == 'C'){
-    led3Blink = true;
+    cycleThreeActive = true;
   } else if (data == 'Z'){
     strip1.clear(); strip1.show();
     strip2.clear(); strip2.show();
@@ -287,11 +293,9 @@ void loop() {
   blinkLED1();
   blinkLED2();
   blinkLED3();
-
-  cycle1Handler();
-  cycle2Handler();
-  cycle3Handler();
-
+  if (cycleOneActive){ cycle1Handler(); }
+  if (cycleTwoActive){ cycle2Handler(); }
+  if (cycleThreeActive){ cycle3Handler(); }
   updateSensorState();
 
   // readBTSerial();
