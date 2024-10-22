@@ -16,11 +16,14 @@
 #define TIMOUT_2             15000
 #define TIMOUT_3             15000
 
+#define RESET_TIMOUT         45000
+
 #define LED_BLINK_DELAY  500
 
 #define RED           255,  0,    0
 #define BLUE          0,    0,    255
 #define PURPLE        255,  0,    255
+#define WHITE         255,  255 , 255
 
 #define SENSOR_1_DETECTED  digitalRead(SENSOR_1) == LOW
 #define SENSOR_2_DETECTED  digitalRead(SENSOR_2) == LOW
@@ -50,13 +53,55 @@ uint32_t  cycleOneUpdateMillis   = 0;
 uint32_t  cycleTwoUpdateMillis   = 0;
 uint32_t  cycleThreeUpdateMillis = 0;
 
+uint32_t  cycleOneResetMillis    = 0;
+uint32_t  cycleTwoResetMillis    = 0;
+uint32_t  cycleThreeResetMillis  = 0;
+
+
 
 BluetoothSerial SerialBT;
 
 Adafruit_NeoPixel strip1 = Adafruit_NeoPixel(STRIP1_NUMPIXELS, LED_1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip2 = Adafruit_NeoPixel(STRIP2_NUMPIXELS, LED_2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel strip3 = Adafruit_NeoPixel(STRIP3_NUMPIXELS, LED_3, NEO_GRB + NEO_KHZ800); 
+void stripTestRed(){
+  for(int i=0; i<STRIP1_NUMPIXELS; i++){
+    strip1.setPixelColor(i, strip1.Color(255, 0, 0));
+    strip2.setPixelColor(i, strip2.Color(255, 0, 0));
+    strip3.setPixelColor(i, strip3.Color(255, 0, 0));
+    strip1.show(); strip2.show(); strip3.show();
+    delay(50);
+  }
+}
 
+void stripTestGreen(){
+  for(int i=0; i<STRIP1_NUMPIXELS; i++){
+    strip1.setPixelColor(i, strip1.Color(0, 255, 0));
+    strip2.setPixelColor(i, strip2.Color(0, 255, 0));
+    strip3.setPixelColor(i, strip3.Color(0, 255, 0));
+    strip1.show(); strip2.show(); strip3.show();
+    delay(50);
+  }
+}
+void stripTestBlue(){
+  for(int i=0; i<STRIP1_NUMPIXELS; i++){
+    strip1.setPixelColor(i, strip1.Color(0, 0, 255));
+    strip2.setPixelColor(i, strip2.Color(0, 0, 255));
+    strip3.setPixelColor(i, strip3.Color(0, 0, 255));
+    strip1.show(); strip2.show(); strip3.show();
+    delay(50);
+  }
+}
+
+void stripTestWhite(){
+  for (int i = 0; i < STRIP1_NUMPIXELS; i++) {
+    strip1.setPixelColor(i, WHITE);
+    strip2.setPixelColor(i, WHITE);
+    strip3.setPixelColor(i, WHITE);
+    strip1.show(); strip2.show(); strip3.show();
+    delay(50);
+  }
+}
 void stripTest(){
   for(int i=0; i<STRIP1_NUMPIXELS; i++){
     strip1.setPixelColor(i, strip1.Color(255, 0, 0));
@@ -76,6 +121,13 @@ void stripTest(){
     strip1.setPixelColor(i, strip1.Color(0, 0, 255));
     strip2.setPixelColor(i, strip2.Color(0, 0, 255));
     strip3.setPixelColor(i, strip3.Color(0, 0, 255));
+    strip1.show(); strip2.show(); strip3.show();
+    delay(50);
+  }
+  for (int i = 0; i < STRIP1_NUMPIXELS; i++) {
+    strip1.setPixelColor(i, WHITE);
+    strip2.setPixelColor(i, WHITE);
+    strip3.setPixelColor(i, WHITE);
     strip1.show(); strip2.show(); strip3.show();
     delay(50);
   }
@@ -175,6 +227,7 @@ void cycle1Handler(){
     strip1.setPixelColor(cycleOneCounter, RED);
     strip1.show();
     cycleOneCounter++;
+    cycleOneResetMillis = millis();
     if (cycleOneCounter == STRIP1_NUMPIXELS){
       Serial.println("A_0");
       led1Blink = true;
@@ -192,6 +245,7 @@ void cycle2Handler(){
     strip2.setPixelColor(cycleTwoCounter, BLUE);
     strip2.show();
     cycleTwoCounter++;
+    cycleTwoResetMillis = millis();
     if (cycleTwoCounter == STRIP2_NUMPIXELS){
       Serial.println("B_0");
       led2Blink = true;
@@ -209,6 +263,7 @@ void cycle3Handler(){
     strip3.setPixelColor(cycleThreeCounter, PURPLE);
     strip3.show();
     cycleThreeCounter++;
+    cycleThreeResetMillis = millis();
     if (cycleThreeCounter == STRIP3_NUMPIXELS){
       Serial.println("C_0");
       led3Blink = true;
@@ -234,10 +289,13 @@ void updateSensorState(){
 
 void processData(char data){
   if (data == 'A'){
+    cycleOneResetMillis = millis();
     cycleOneActive = true;
   } else if (data == 'B'){
+    cycleTwoResetMillis = millis();
     cycleTwoActive = true;
   } else if (data == 'C'){
+    cycleThreeResetMillis = millis();
     cycleThreeActive = true;
   } else if (data == 'Z'){
     strip1.clear(); strip1.show();
@@ -246,6 +304,17 @@ void processData(char data){
     cycleOneCounter   = 0;  cycleOneUpdateMillis   = millis();  Serial.println("A_0");
     cycleTwoCounter   = 0;  cycleTwoUpdateMillis   = millis();  Serial.println("B_0");
     cycleThreeCounter = 0;  cycleThreeUpdateMillis = millis();  Serial.println("C_0");
+  }
+  else if (data == 'T'){
+    stripTest();
+  } else if (data == '1'){
+    stripTestRed();
+  } else if (data == '2'){
+    stripTestGreen();
+  } else if (data == '3'){
+    stripTestBlue();
+  } else if (data == '4'){
+    stripTestWhite();
   }
   // TODO: Implement this function
 }
@@ -262,12 +331,34 @@ void readSerial () {
   if (Serial.available()) {
     char incoming = Serial.read();
     if (DEBUG){ Serial.println(incoming); }
+    if (DEBUG){ SerialBT.println(incoming); }
     processData(incoming);
   }
 }
 
 void debugPins(){
   Serial.println("S1: " + (String(digitalRead(SENSOR_1))) + "\t S2: " + (String(digitalRead(SENSOR_2))) + "\t S3: " + String((digitalRead(SENSOR_3)))); 
+}
+
+void resetCycles(){
+  if (millis() - cycleOneResetMillis > RESET_TIMOUT && cycleOneActive){
+    cycleOneCounter = 0;
+    cycleOneActive = false;
+    strip1.clear(); strip1.show();
+    Serial.println("A_0");
+  }
+  if (millis() - cycleTwoResetMillis > RESET_TIMOUT && cycleTwoActive){
+    cycleTwoCounter = 0;
+    cycleTwoActive = false;
+    strip2.clear(); strip2.show();
+    Serial.println("B_0");
+  }
+  if (millis() - cycleThreeResetMillis > RESET_TIMOUT && cycleThreeActive){
+    cycleThreeCounter = 0;
+    cycleThreeActive = false;
+    strip3.clear(); strip3.show();
+    Serial.println("C_0");
+  }
 }
 
 void io_init() {
@@ -293,12 +384,14 @@ void loop() {
   blinkLED1();
   blinkLED2();
   blinkLED3();
-  if (cycleOneActive){ cycle1Handler(); }
-  if (cycleTwoActive){ cycle2Handler(); }
-  if (cycleThreeActive){ cycle3Handler(); }
-  updateSensorState();
 
-  // readBTSerial();
+  if (cycleOneActive)   { cycle1Handler(); }
+  if (cycleTwoActive)   { cycle2Handler(); }
+  if (cycleThreeActive) { cycle3Handler(); }
+  
+  updateSensorState();
+  resetCycles();
+  readBTSerial();
   readSerial();
 }
 
