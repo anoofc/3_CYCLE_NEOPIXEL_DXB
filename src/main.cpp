@@ -49,9 +49,9 @@ bool      cycleOneActive         = false;
 bool      cycleTwoActive         = false;
 bool      cycleThreeActive       = false;
 
-uint16_t  cycleOneCounter        = 146;
-uint16_t  cycleTwoCounter        = 139;
-uint16_t  cycleThreeCounter      = 133;
+uint16_t  cycleOneCounter        = STRIP1ENDPIXEL - 1;
+uint16_t  cycleTwoCounter        = STRIP2ENDPIXEL - 1;
+uint16_t  cycleThreeCounter      = STRIP3ENDPIXEL - 1;
 
 uint32_t  cycleOneUpdateMillis   = 0;
 uint32_t  cycleTwoUpdateMillis   = 0;
@@ -242,17 +242,17 @@ void cycle1Handler(){
     Serial.println("A_1");
     strip1.setPixelColor(cycleOneCounter, RED);
     strip1.show();
-    cycleOneCounter++;
+    cycleOneCounter--;
     cycleOneResetMillis = millis();
-    if (cycleOneCounter == STRIP1_NUMPIXELS){
-      cycleOneCounter = 0;
+    if (cycleOneCounter == 0){
+      cycleOneCounter = STRIP1_NUMPIXELS;
       strip1.setPixelColor(cycleOneCounter, RED);
       strip1.show();
     }
     if (cycleOneCounter == STRIP1ENDPIXEL){
       Serial.println("A_0");
       led1Blink = true;
-      cycleOneCounter = STRIP1ENDPIXEL+1;
+      cycleOneCounter = STRIP1ENDPIXEL-1;
       cycleOneActive = false;
       cycleOneUpdateMillis = millis();
     }
@@ -265,17 +265,17 @@ void cycle2Handler(){
     Serial.println("B_1");
     strip2.setPixelColor(cycleTwoCounter, BLUE);
     strip2.show();
-    cycleTwoCounter++;
+    cycleTwoCounter--;
     cycleTwoResetMillis = millis();
-    if (cycleTwoCounter == STRIP2_NUMPIXELS){
-      cycleTwoCounter = 0;
+    if (cycleTwoCounter == 0){
+      cycleTwoCounter = STRIP2_NUMPIXELS;
       strip2.setPixelColor(cycleTwoCounter, BLUE);
       strip2.show();
     }
     if (cycleTwoCounter == STRIP2ENDPIXEL){
       Serial.println("B_0");
       led2Blink = true;
-      cycleTwoCounter = STRIP2ENDPIXEL+1;
+      cycleTwoCounter = STRIP2ENDPIXEL-1;
       cycleTwoActive = false;
       cycleTwoUpdateMillis = millis();
     }
@@ -288,17 +288,17 @@ void cycle3Handler(){
     Serial.println("C_1");
     strip3.setPixelColor(cycleThreeCounter, WHITE);
     strip3.show();
-    cycleThreeCounter++;
+    cycleThreeCounter--;
     cycleThreeResetMillis = millis();
-    if (cycleThreeCounter == STRIP3_NUMPIXELS){
-      cycleThreeCounter = 0;
+    if (cycleThreeCounter == 0){
+      cycleThreeCounter = STRIP3_NUMPIXELS;
       strip3.setPixelColor(cycleThreeCounter, WHITE);
       strip3.show();
     }
     if (cycleThreeCounter == STRIP3ENDPIXEL){
       Serial.println("C_0");
       led3Blink = true;
-      cycleThreeCounter = STRIP3ENDPIXEL+1;
+      cycleThreeCounter = STRIP3ENDPIXEL-1;
       cycleThreeActive = false;
       cycleThreeUpdateMillis = millis();
     }
@@ -332,9 +332,9 @@ void processData(char data){
     strip1.clear(); strip1.show();
     strip2.clear(); strip2.show();
     strip3.clear(); strip3.show();
-    cycleOneCounter   = STRIP1ENDPIXEL+1;  cycleOneUpdateMillis   = millis();  Serial.println("A_0");
-    cycleTwoCounter   = STRIP2ENDPIXEL+1;  cycleTwoUpdateMillis   = millis();  Serial.println("B_0");
-    cycleThreeCounter = STRIP3ENDPIXEL+1;  cycleThreeUpdateMillis = millis();  Serial.println("C_0");
+    cycleOneCounter   = STRIP1ENDPIXEL-1;  cycleOneUpdateMillis   = millis();  Serial.println("A_0");
+    cycleTwoCounter   = STRIP2ENDPIXEL-1;  cycleTwoUpdateMillis   = millis();  Serial.println("B_0");
+    cycleThreeCounter = STRIP3ENDPIXEL-1;  cycleThreeUpdateMillis = millis();  Serial.println("C_0");
   }
   else if (data == 'T'){
     stripTest();
@@ -381,19 +381,19 @@ void debugPins(){
 
 void resetCycles(){
   if (millis() - cycleOneResetMillis > RESET_TIMOUT && cycleOneActive){
-    cycleOneCounter = 146;
+    cycleOneCounter = STRIP1ENDPIXEL - 1;
     cycleOneActive = false;
     strip1.clear(); strip1.show();
     Serial.println("A_0");
   }
   if (millis() - cycleTwoResetMillis > RESET_TIMOUT && cycleTwoActive){
-    cycleTwoCounter = 139;
+    cycleTwoCounter = STRIP2ENDPIXEL - 1;
     cycleTwoActive = false;
     strip2.clear(); strip2.show();
     Serial.println("B_0");
   }
   if (millis() - cycleThreeResetMillis > RESET_TIMOUT && cycleThreeActive){
-    cycleThreeCounter = 133;
+    cycleThreeCounter = STRIP3ENDPIXEL - 1;
     cycleThreeActive = false;
     strip3.clear(); strip3.show();
     Serial.println("C_0");
