@@ -8,30 +8,30 @@
 #define LED_2         26
 #define LED_3         25
 
-#define STRIP1_NUMPIXELS     364
-#define STRIP2_NUMPIXELS     345      
-#define STRIP3_NUMPIXELS     328   
+#define STRIP1_NUMPIXELS      364
+#define STRIP2_NUMPIXELS      345      
+#define STRIP3_NUMPIXELS      328   
 
-#define STRIP1ENDPIXEL      145
-#define STRIP2ENDPIXEL      138
-#define STRIP3ENDPIXEL      132
+#define STRIP1ENDPIXEL        145
+#define STRIP2ENDPIXEL        138
+#define STRIP3ENDPIXEL        132
 
-#define TIMOUT_1             15000
-#define TIMOUT_2             15000
-#define TIMOUT_3             15000
+#define TIMOUT_1              15000
+#define TIMOUT_2              15000
+#define TIMOUT_3              15000
 
-#define RESET_TIMOUT         45000
+#define RESET_TIMOUT          45000
 
-#define LED_BLINK_DELAY  500
+#define LED_BLINK_DELAY       500
 
-#define RED           255,  0,    0
-#define BLUE          0,    0,    255
-#define PURPLE        255,  0,    255
-#define WHITE         255,  255 , 255
+#define RED                   255,  0,    0
+#define BLUE                  0,    0,    255
+#define PURPLE                255,  0,    255
+#define WHITE                 255,  255 , 255
 
-#define SENSOR_1_DETECTED  digitalRead(SENSOR_1) == LOW
-#define SENSOR_2_DETECTED  digitalRead(SENSOR_2) == LOW
-#define SENSOR_3_DETECTED  digitalRead(SENSOR_3) == LOW
+#define SENSOR_1_DETECTED     digitalRead(SENSOR_1) == LOW
+#define SENSOR_2_DETECTED     digitalRead(SENSOR_2) == LOW
+#define SENSOR_3_DETECTED     digitalRead(SENSOR_3) == LOW
 
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
